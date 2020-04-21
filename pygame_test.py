@@ -51,13 +51,14 @@ while run:
        isJump = True
             
     win.fill((0,0,0)) # 각 도형 자취 안남도록 하는것 및 배경설정
-    
-    pygame.draw.rect(win, (255,255, 255), (x, y, width, height)) # 플레이어 그리기
+
+    pygame.draw.rect(win, (255,255,255), (x, y, width, height)) # 플레이어 그리기
 
 
     # 적 움직임, 우선 랜덤하게 각자 움직이게함
     for i in range(len(enemy)):
-        pygame.draw.rect(win, (255, 0, 0), (enemy[i][0], enemy[i][1], width, height))
+        randomColor = (random.randrange(0,256),random.randrange(0,256),random.randrange(0,256)) # 적 랜덤컬러
+        pygame.draw.rect(win, randomColor, (enemy[i][0], enemy[i][1], width, height))
         randomMove = random.randrange(0,4)
 
         if randomMove == 0 and enemy[i][0] > vel:
