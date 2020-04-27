@@ -15,8 +15,8 @@ x = 50 # 플레이어 초기 x 위치값
 y = 400 # 플레이어 초기 y 위치값
 width = 40 # 플레이어 높이
 height = 40 # 플레이어 너비
-vel = 7 # 이동속도
-jumpHeight = 10 # 점프 높이
+vel = 1 # 이동속도
+jumpHeight = 8 # 점프 높이
 
 # 적
 enemyNum = 20 # 적 개수
@@ -24,10 +24,12 @@ enemyNum = 20 # 적 개수
 # 적 위치 값을 배열 넣기, 랜덤한 초기 위치값으로 설정
 enemy = []
 for i in range(enemyNum):
-    enemy.append([random.randrange(200,20000), 400])
+    enemy.append([ x+(width*random.randrange(5,1000)) , y-(height*random.randrange(0,4)) ])
 
 isJump = False
 jumpCount = jumpHeight
+
+pygame.time.delay(10000)
 
 run = True
 while run:
@@ -67,8 +69,11 @@ while run:
         # 거리가 20 이하로 줄어들면 게임 오버 시킴
         distance = ( (enemy[i][0] - x)**2 + (enemy[i][1] - y)**2 ) ** 0.5 
         if (distance < width):
-            print("game over")
-            run = False
+            if enemy[i][1] < x:
+                y += enemy[i][1]
+            else:
+                print("game over")
+                run = False
 
     pygame.display.update()
 
