@@ -12,10 +12,11 @@ pygame.display.set_caption("game test")
 
 # 플레이어
 x = 50 # 플레이어 초기 x 위치값
-y = 50 # 플레이어 초기 y 위치값
-width = 20 # 플레이어 높이
-height = 20 # 플레이어 너비
-vel = 5 # 이동속도
+y = 400 # 플레이어 초기 y 위치값
+width = 40 # 플레이어 높이
+height = 40 # 플레이어 너비
+vel = 7 # 이동속도
+jumpHeight = 10 # 점프 높이
 
 # 적
 enemyNum = 20 # 적 개수
@@ -23,7 +24,10 @@ enemyNum = 20 # 적 개수
 # 적 위치 값을 배열 넣기, 랜덤한 초기 위치값으로 설정
 enemy = []
 for i in range(enemyNum):
-    enemy.append([random.randrange(100,screenWidth), random.randrange(100,screenHeight)])
+    enemy.append([random.randrange(200,20000), 400])
+
+isJump = False
+jumpCount = jumpHeight
 
 run = True
 while run:
@@ -34,43 +38,35 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    # 키 눌렸을때 설정하는것, 화면 밖으로 못나가게끔 설정함
     keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_LEFT] and x > vel:
-        x -= vel
-    if keys[pygame.K_RIGHT] and x < screenWidth - width - vel:
-        x += vel
-    if keys[pygame.K_UP] and y > vel:
-        y -= vel
-    if keys[pygame.K_DOWN] and y < screenHeight - height - vel:
-        y += vel
-    if keys[pygame.K_SPACE]:
-       isJump = True
-            
+    # 점프
+    if isJump == False:
+        if keys[pygame.K_SPACE]:
+            isJump = True
+    else:
+        if jumpCount >= -jumpHeight:
+            neg = 1
+            if jumpCount < 0:
+                neg = -1
+            y -= (jumpCount ** 2) * 0.5 * neg
+            jumpCount -= 1
+        else:
+            isJump = False
+            jumpCount = jumpHeight
+  
     win.fill((0,0,0)) # 각 도형 자취 안남도록 하는것 및 배경설정
 
     pygame.draw.rect(win, (255,255,255), (x, y, width, height)) # 플레이어 그리기
 
-
     # 적 움직임, 우선 랜덤하게 각자 움직이게함
     for i in range(len(enemy)):
-        randomColor = (random.randrange(0,256),random.randrange(0,256),random.randrange(0,256)) # 적 블링블링
-        pygame.draw.rect(win, randomColor, (enemy[i][0], enemy[i][1], width, height))
-        randomMove = random.randrange(0,4)
+        pygame.draw.rect(win, (255,0,0), (enemy[i][0], enemy[i][1], width, height))
 
-        if randomMove == 0 and enemy[i][0] > vel:
-            enemy[i][0] -= vel
-        if randomMove == 1 and enemy[i][0] < screenWidth - width - vel:
-            enemy[i][0] += vel
-        if randomMove == 2 and enemy[i][1] > vel:
-            enemy[i][1] -= vel
-        if randomMove == 3 and enemy[i][1] < screenHeight - height - vel:
-            enemy[i][1] += vel
+        enemy[i][0] -= vel
 
         # 거리가 20 이하로 줄어들면 게임 오버 시킴
         distance = ( (enemy[i][0] - x)**2 + (enemy[i][1] - y)**2 ) ** 0.5 
-        if (distance < 20):
+        if (distance < width):
             print("game over")
             run = False
 
