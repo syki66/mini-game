@@ -3,9 +3,7 @@ import random
 
 pygame.init()
 
-
-
-screenWidth = 500
+screenWidth = 1000
 screenHeight = 500
 
 win = pygame.display.set_mode((screenWidth, screenHeight))
@@ -25,7 +23,7 @@ enemyNum = 20 # 적 개수
 # 적 위치 값을 배열 넣기, 랜덤한 초기 위치값으로 설정
 enemy = []
 for i in range(enemyNum):
-    enemy.append([random.randrange(100,screenHeight), random.randrange(100,screenWidth)]) # 
+    enemy.append([random.randrange(100,screenWidth), random.randrange(100,screenHeight)])
 
 run = True
 while run:
@@ -57,7 +55,7 @@ while run:
 
     # 적 움직임, 우선 랜덤하게 각자 움직이게함
     for i in range(len(enemy)):
-        randomColor = (random.randrange(0,256),random.randrange(0,256),random.randrange(0,256)) # 적 랜덤컬러
+        randomColor = (random.randrange(0,256),random.randrange(0,256),random.randrange(0,256)) # 적 블링블링
         pygame.draw.rect(win, randomColor, (enemy[i][0], enemy[i][1], width, height))
         randomMove = random.randrange(0,4)
 
